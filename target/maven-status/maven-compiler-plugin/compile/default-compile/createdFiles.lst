@@ -1,0 +1,3 @@
+com\avbo\northwind_entity_manager\HibernateUtil.class
+com\avbo\northwind_entity_manager\model\SupplierDao.class
+com\avbo\northwind_entity_manager\SuppliersServlet.class

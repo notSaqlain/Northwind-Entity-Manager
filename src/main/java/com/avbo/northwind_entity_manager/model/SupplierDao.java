@@ -1,5 +1,6 @@
 package com.avbo.northwind_entity_manager.model;
 
+import com.avbo.northwind_entity_manager.HibernateUtil;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -16,7 +17,7 @@ import jakarta.persistence.criteria.Root;
 public class SupplierDao {
 
     /**
-     * DELETE — elimina un supplier tramite ID.
+     * DELETE ï¿½ elimina un supplier tramite ID.
      */
     public boolean deleteSupplier(int id) {
         Transaction transaction = null;
@@ -45,7 +46,7 @@ public class SupplierDao {
     }
 
     /**
-     * POST — inserisce un nuovo supplier.
+     * POST ï¿½ inserisce un nuovo supplier.
      */
     public boolean insertSupplier(Supplier supplier) {
         Transaction transaction = null;
@@ -67,7 +68,7 @@ public class SupplierDao {
     }
 
     /**
-     * PUT — aggiorna un supplier esistente.
+     * PUT ï¿½ aggiorna un supplier esistente.
      */
     public boolean updateSupplier(Supplier supplier) {
         Transaction transaction = null;
@@ -89,7 +90,7 @@ public class SupplierDao {
     }
 
     /**
-     * GET — restituisce un supplier tramite ID.
+     * GET ï¿½ restituisce un supplier tramite ID.
      */
     public Supplier getSupplierById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -98,7 +99,7 @@ public class SupplierDao {
     }
 
     /**
-     * GET — restituisce tutti i suppliers.
+     * GET ï¿½ restituisce tutti i suppliers.
      */
     public List<Supplier> getAllSuppliers() {
 

@@ -1,16 +1,14 @@
-﻿/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.avbo.northwind_entity_manager;
 
+import com.avbo.northwind_entity_manager.model.Supplier;
 import java.util.Properties;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
+
+
 
 /**
  *
@@ -66,7 +64,7 @@ public class HibernateUtil {
                 configuration.setProperties(settings);
 
                 // Registra la classe Entity Shippers
-                configuration.addAnnotatedClass(Shippers.class);
+                configuration.addAnnotatedClass(Supplier.class);
 
                 // Costruisce il ServiceRegistry (necessario per creare la SessionFactory)
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
