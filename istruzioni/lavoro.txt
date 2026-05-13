@@ -1,0 +1,3 @@
+non ho capito bene chi fa cosa ma io per ora faccio l'hibernate della tabella 'suppliers' di northwind(guarda allegato)
+
+biso mi sembra che abbia detto che facesse il frontend
