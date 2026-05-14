@@ -37,7 +37,7 @@ public class SuppliersServlet extends HttpServlet {
     }
 
     // ============================
-    //           GET
+    // GET
     // ============================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,7 +54,7 @@ public class SuppliersServlet extends HttpServlet {
     }
 
     // ============================
-    //           POST
+    // POST
     // ============================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -74,7 +74,7 @@ public class SuppliersServlet extends HttpServlet {
     }
 
     // ============================
-    //           PUT
+    // PUT
     // ============================
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
@@ -94,7 +94,7 @@ public class SuppliersServlet extends HttpServlet {
     }
 
     // ============================
-    //         DELETE
+    // DELETE
     // ============================
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
