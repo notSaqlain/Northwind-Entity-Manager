@@ -17,7 +17,7 @@ import jakarta.persistence.criteria.Root;
 public class SupplierDao {
 
     /**
-     * DELETE � elimina un supplier tramite ID.
+     * DELETE: elimina un supplier tramite ID.
      */
     public boolean deleteSupplier(int id) {
         Transaction transaction = null;
@@ -38,7 +38,8 @@ public class SupplierDao {
             transaction.commit();
 
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null)
+                transaction.rollback();
             e.printStackTrace();
         }
 
@@ -46,7 +47,7 @@ public class SupplierDao {
     }
 
     /**
-     * POST � inserisce un nuovo supplier.
+     * POST: inserisce un nuovo supplier.
      */
     public boolean insertSupplier(Supplier supplier) {
         Transaction transaction = null;
@@ -61,14 +62,15 @@ public class SupplierDao {
             return true;
 
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null)
+                transaction.rollback();
             e.printStackTrace();
             return false;
         }
     }
 
     /**
-     * PUT � aggiorna un supplier esistente.
+     * PUT: aggiorna un supplier esistente.
      */
     public boolean updateSupplier(Supplier supplier) {
         Transaction transaction = null;
@@ -83,14 +85,15 @@ public class SupplierDao {
             return true;
 
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null)
+                transaction.rollback();
             e.printStackTrace();
             return false;
         }
     }
 
     /**
-     * GET � restituisce un supplier tramite ID.
+     * GET: restituisce un supplier tramite ID.
      */
     public Supplier getSupplierById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -99,7 +102,7 @@ public class SupplierDao {
     }
 
     /**
-     * GET � restituisce tutti i suppliers.
+     * GET: restituisce tutti i suppliers.
      */
     public List<Supplier> getAllSuppliers() {
 
@@ -121,7 +124,8 @@ public class SupplierDao {
             transaction.commit();
 
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null)
+                transaction.rollback();
             e.printStackTrace();
         }
 

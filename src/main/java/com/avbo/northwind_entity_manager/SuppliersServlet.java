@@ -36,9 +36,7 @@ public class SuppliersServlet extends HttpServlet {
         HibernateUtil.setFilePath(f.getPath());
     }
 
-    // ============================
     // GET
-    // ============================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -53,9 +51,7 @@ public class SuppliersServlet extends HttpServlet {
         out.flush();
     }
 
-    // ============================
     // POST
-    // ============================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -73,9 +69,7 @@ public class SuppliersServlet extends HttpServlet {
         response.getWriter().print(json.toString());
     }
 
-    // ============================
     // PUT
-    // ============================
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -93,9 +87,7 @@ public class SuppliersServlet extends HttpServlet {
         response.getWriter().print(json.toString());
     }
 
-    // ============================
     // DELETE
-    // ============================
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

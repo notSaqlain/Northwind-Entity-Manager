@@ -8,13 +8,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
-
-
-/**
- *
- * @author Lorenzo
- */
-
 public class HibernateUtil {
 
     // SessionFactory è l’oggetto principale di Hibernate:
@@ -85,7 +78,5 @@ public class HibernateUtil {
         // Se la SessionFactory esiste già, la restituisce
         return sessionFactory;
     }
-
- 
 
 }
