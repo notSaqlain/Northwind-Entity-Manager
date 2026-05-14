@@ -47,3 +47,37 @@ Il progetto segue un'architettura a livelli (Layered Architecture) per garantire
 2. Configurare il file `hibernate.cfg.xml` inserendo il percorso corretto al file del database:
    ```xml
    <property name="connection.url">jdbc:sqlite:/percorso/verso/northwind.db</property>
+   ```
+
+### 3. Clonare il Repository
+```bash
+git clone https://github.com/notSaqlain/Northwind-Entity-Manager.git
+cd Northwind-Entity-Manager
+```
+
+### 4. Build con Maven
+Maven scaricherà automaticamente tutte le dipendenze e compilerà il progetto:
+```bash
+mvn clean package
+```
+Il file `.war` verrà generato in `target/northwind_entity_manager.war`.
+
+### 5. Deploy su Tomcat
+1. Copiare il file `.war` nella cartella `webapps/` di Tomcat:
+   ```bash
+   cp target/northwind_entity_manager.war /path/to/tomcat/webapps/
+   ```
+2. Avviare (o riavviare) Tomcat:
+   ```bash
+   # Linux / macOS
+   /path/to/tomcat/bin/startup.sh
+
+   # Windows
+   /path/to/tomcat/bin/startup.bat
+   ```
+3. Aprire il browser e navigare su:
+   ```
+   http://localhost:8080/northwind_entity_manager
+   ```
+
+> **Nota:** La cartella `target/` **non è inclusa nel repository** perché è generata automaticamente da Maven ad ogni build. Non è necessario aggiungerla manualmente.
