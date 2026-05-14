@@ -1,6 +1,0 @@
-non ho capito bene chi fa cosa ma io per ora faccio l'hibernate della tabella 'suppliers' di northwind(guarda allegato)
-sotto java/.../model/ c'è il file supplier.java, che è appunto l'hibernate della tabella supplier(allegata in questa cartella)
-per il backend da fare:
---> dao per gestire connessioni
---> api per comunicare con dao che gestisce poi il backend
-biso mi sembra che abbia detto che facesse il frontend
