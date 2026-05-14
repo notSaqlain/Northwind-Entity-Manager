@@ -26,7 +26,7 @@ public class SupplierDao {
 
             transaction = session.beginTransaction();
 
-            Supplier supplier = session.get(Supplier.class, id);
+            Supplier supplier = session.get(Supplier.class, (Integer) id);
 
             if (supplier != null) {
                 session.remove(supplier);
@@ -94,7 +94,7 @@ public class SupplierDao {
      */
     public Supplier getSupplierById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Supplier.class, id);
+            return session.get(Supplier.class, (Integer) id);
         }
     }
 
