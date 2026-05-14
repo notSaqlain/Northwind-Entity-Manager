@@ -1,0 +1,137 @@
+# ============================================================
+#  Northwind Entity Manager — .gitignore
+#  Java / Jakarta EE / Maven / WAR project
+# ============================================================
+
+# ----------------------------
+# Maven build output
+# ----------------------------
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ----------------------------
+# Compiled Java class files
+# ----------------------------
+*.class
+
+# ----------------------------
+# JAR / WAR / EAR / RAR archives
+# ----------------------------
+*.jar
+*.war
+*.ear
+*.rar
+*.zip
+*.tar.gz
+
+# ----------------------------
+# Log files
+# ----------------------------
+*.log
+logs/
+*.log.*
+
+# ----------------------------
+# SQLite databases
+# ----------------------------
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# ----------------------------
+# OS-generated files
+# ----------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ----------------------------
+# IDE — VS Code
+# ----------------------------
+.vscode/
+
+# ----------------------------
+# IDE — IntelliJ IDEA
+# ----------------------------
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# ----------------------------
+# IDE — NetBeans
+# ----------------------------
+nbproject/private/
+nbproject/Makefile-*.mk
+nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ----------------------------
+# IDE — Eclipse
+# ----------------------------
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+
+# ----------------------------
+# IDE — Visual Studio / .vs
+# ----------------------------
+.vs/
+
+# ----------------------------
+# Java crash dumps & heap dumps
+# ----------------------------
+hs_err_pid*
+replay_pid*
+*.hprof
+
+# ----------------------------
+# Environment & secrets
+# ----------------------------
+.env
+.env.*
+*.properties.local
+secrets/
+credentials/
+
+# ----------------------------
+# Temporary / misc
+# ----------------------------
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.orig
