@@ -1,10 +1,135 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northwind Entity Manager</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <main class="app-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Northwind</p>
+                <h1>Gestione fornitori</h1>
+            </div>
+            <button class="secondary-button" id="refreshButton" type="button">Aggiorna</button>
+        </header>
+
+        <section class="layout-grid" aria-label="Gestione dati fornitori">
+            <form class="supplier-form" id="supplierForm" autocomplete="off">
+                <div class="form-header">
+                    <h2 id="formTitle">Nuovo fornitore</h2>
+                    <span class="form-mode" id="formMode">Inserimento</span>
+                </div>
+
+                <input id="supplierID" name="supplierID" type="hidden">
+
+                <label>
+                    Azienda *
+                    <input id="companyName" name="companyName" type="text" required maxlength="80">
+                </label>
+
+                <label>
+                    Referente
+                    <input id="contactName" name="contactName" type="text" maxlength="80">
+                </label>
+
+                <label>
+                    Ruolo referente
+                    <input id="contactTitle" name="contactTitle" type="text" maxlength="80">
+                </label>
+
+                <label>
+                    Indirizzo
+                    <input id="address" name="address" type="text" maxlength="120">
+                </label>
+
+                <div class="two-columns">
+                    <label>
+                        Citta
+                        <input id="city" name="city" type="text" maxlength="50">
+                    </label>
+
+                    <label>
+                        Regione
+                        <input id="region" name="region" type="text" maxlength="50">
+                    </label>
+                </div>
+
+                <div class="two-columns">
+                    <label>
+                        CAP
+                        <input id="postalCode" name="postalCode" type="text" maxlength="20">
+                    </label>
+
+                    <label>
+                        Paese
+                        <input id="country" name="country" type="text" maxlength="50">
+                    </label>
+                </div>
+
+                <div class="two-columns">
+                    <label>
+                        Telefono
+                        <input id="phone" name="phone" type="text" maxlength="30">
+                    </label>
+
+                    <label>
+                        Fax
+                        <input id="fax" name="fax" type="text" maxlength="30">
+                    </label>
+                </div>
+
+                <label>
+                    Home page
+                    <textarea id="homePage" name="homePage" rows="3"></textarea>
+                </label>
+
+                <div class="form-actions">
+                    <button class="primary-button" id="submitButton" type="submit">Salva</button>
+                    <button class="secondary-button" id="cancelButton" type="button">Annulla</button>
+                </div>
+            </form>
+
+            <section class="table-section" aria-labelledby="tableTitle">
+                <div class="table-toolbar">
+                    <div>
+                        <h2 id="tableTitle">Elenco fornitori</h2>
+                        <p id="recordCount">Nessun dato caricato</p>
+                    </div>
+                    <label class="search-field">
+                        Cerca
+                        <input id="searchInput" type="search" placeholder="Azienda, referente, paese">
+                    </label>
+                </div>
+
+                <div class="message" id="message" role="status" aria-live="polite"></div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Azienda</th>
+                                <th>Referente</th>
+                                <th>Citta</th>
+                                <th>Paese</th>
+                                <th>Telefono</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppliersTableBody">
+                            <tr>
+                                <td colspan="7" class="empty-state">Caricamento dati...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="assets/js/suppliers.js"></script>
+</body>
 </html>
