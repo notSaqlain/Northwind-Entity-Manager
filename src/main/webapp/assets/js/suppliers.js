@@ -1,319 +1,295 @@
-(function () {
-    "use strict";
+// Developed by Bisognin Luca - May 2026
 
-    var API_URL = "api/suppliers";
-    var suppliers = [];
-    var form = document.getElementById("supplierForm");
-    var formTitle = document.getElementById("formTitle");
-    var formMode = document.getElementById("formMode");
-    var submitButton = document.getElementById("submitButton");
-    var cancelButton = document.getElementById("cancelButton");
-    var refreshButton = document.getElementById("refreshButton");
-    var searchInput = document.getElementById("searchInput");
-    var tableBody = document.getElementById("suppliersTableBody");
-    var recordCount = document.getElementById("recordCount");
-    var message = document.getElementById("message");
+// GESTIONE FORNITORI //
+// Questo file contiene la logica per gestire i fornitori con i metodi CRUD: 
+// - Create (saveSupplier),
+// - Read (loadSuppliers),
+// - Update (fillForm e saveSupplier), 
+// - Delete (deleteSupplier),
+// Esiste anche un metodo per filtrare i fornitori caricati => Search (renderTable)
+// Tramite richieste XMLHttpRequest alla servlet Java e la manipolazione del DOM, la pagina viene aggiornata in modo dinamico
 
-    var fields = [
-        "supplierID",
-        "companyName",
-        "contactName",
-        "contactTitle",
-        "address",
-        "city",
-        "region",
-        "postalCode",
-        "country",
-        "phone",
-        "fax",
-        "homePage"
-    ];
 
-    document.addEventListener("DOMContentLoaded", function () {
-        form.addEventListener("submit", onFormSubmit);
-        cancelButton.addEventListener("click", resetForm);
-        refreshButton.addEventListener("click", loadSuppliers);
-        searchInput.addEventListener("input", renderTable);
-        tableBody.addEventListener("click", onTableAction);
+// URL della servlet Java
+var API_URL = "api/suppliers";
 
-        loadSuppliers();
+// array per memorizzare i fornitori caricati dal server
+var suppliers = [];
+
+// elementi DOM
+var form = document.getElementById("supplierForm");
+var tableBody = document.getElementById("suppliersTableBody");
+var searchInput = document.getElementById("searchInput");
+var submitButton = document.getElementById("submitButton");
+var cancelButton = document.getElementById("cancelButton");
+var message = document.getElementById("message");
+
+// caricamento contenuto dopo il caricamento della pagina
+document.addEventListener("DOMContentLoaded", function () {
+
+    // fornitori
+    loadSuppliers();
+
+    // Listener ai pulsanti e input //
+    form.addEventListener("submit", saveSupplier); // invio form
+    searchInput.addEventListener("input", renderTable); // ricerca
+    cancelButton.addEventListener("click", resetForm); // pulsante per annullare
+    tableBody.addEventListener("click", tableActions); // click sui bottoni della tabella
+});
+
+// METODI CRUD //
+
+// READ: carica i fornitori dal server e aggiorna la tabella
+function loadSuppliers() {
+
+    // Creazione richiesta AJAX
+    var xhr = new XMLHttpRequest();
+
+    // Configura richiesta GET
+    xhr.open("GET", API_URL, true);
+
+    // Tipo risposta
+    xhr.setRequestHeader("Accept", "application/json");
+
+    // Controllo cambiamento stato
+    xhr.onreadystatechange = function () {
+
+        // Se richiesta completata
+        if (xhr.readyState === 4) {
+
+            // Se tutto ok
+            if (xhr.status === 200) {
+
+                // Converte JSON in array JavaScript
+                suppliers = JSON.parse(xhr.responseText);
+
+                // Aggiorna tabella
+                renderTable();
+
+            } else {
+
+                showMessage("Errore caricamento fornitori", true);
+            }
+        }
+    };
+
+    // Invio richiesta
+    xhr.send();
+}
+
+// CREATE: SALVATAGGIO FORNITORE
+function saveSupplier(event) {
+    event.preventDefault(); // refresh disabilitato
+
+    // corpo della richiesta con i dati del fornitore
+    var supplier = {
+
+        supplierID: Number(document.getElementById("supplierID").value || 0),
+        companyName: document.getElementById("companyName").value,
+        contactName: document.getElementById("contactName").value,
+        city: document.getElementById("city").value,
+        country: document.getElementById("country").value,
+        phone: document.getElementById("phone").value
+    };
+
+    // se ID esiste => modifica
+    var isEdit = supplier.supplierID > 0;
+
+    // metodo HTTP della richiesta
+    var method; 
+    if (isEdit) method == "PUT";
+    else method = "POST";
+
+    // XMLHttpRequest per salvare un fornitore
+    var xhr = new XMLHttpRequest();
+
+    // apertura richiesta (metodo definito prima)
+    xhr.open(method, API_URL, true); 
+    
+    // tipologia dati => JSON
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    // risposta in JSON
+    xhr.setRequestHeader("Accept", "application/json");
+
+    // check della risposta
+    xhr.onreadystatechange = function () {
+
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 201) { // success
+
+                var response = JSON.parse(xhr.responseText);
+
+                if (response.success) {
+
+                    // messaggio da mostrare all'utente
+                    if (isEdit) showMessage("Fornitore aggiornato");
+                    else showMessage("Fornitore inserito");
+
+                    // clean del form
+                    resetForm();
+
+                    // ricarica i fornitori per aggiornare la tabella
+                    loadSuppliers();
+
+                } 
+                else showMessage("Errore salvataggio", true);
+
+            } 
+            else showMessage("Errore server", true);
+        }
+    };
+
+    // invio dati in JSON
+    xhr.send(JSON.stringify(supplier));
+}
+
+// UPDATE: riempie i campi del form con i dati del fornitore da modificare
+function fillForm(supplier) {
+
+    document.getElementById("supplierID").value = supplier.supplierID;
+    document.getElementById("companyName").value = supplier.companyName;
+    document.getElementById("contactName").value = supplier.contactName;
+    document.getElementById("city").value = supplier.city;
+    document.getElementById("country").value = supplier.country;
+    document.getElementById("phone").value = supplier.phone;
+
+    submitButton.textContent = "Aggiorna";
+}
+
+// DELETE: elimina fornitore
+function deleteSupplier(id) {
+
+    // conferma come fallback
+    if (!confirm("Vuoi eliminare il fornitore?")) return;
+
+    // XMLHttpsRequest per eliminare un fornitore
+    var xhr = new XMLHttpRequest();
+
+    // richiesta DELETE
+    xhr.open("DELETE", API_URL + "?id=" + id, true);
+
+    // check dello stato della richiesta
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) { // success
+                var response = JSON.parse(xhr.responseText);
+
+                if (response.success) {
+                    showMessage("Fornitore eliminato");
+                    loadSuppliers();
+                } 
+                else showMessage("Errore eliminazione", true);
+
+            } 
+            else showMessage("Errore server", true);
+        }
+    };
+
+    // invio richiesta
+    xhr.send();
+}
+
+// SEARCH: filtra e mostra i dati nella tabella in base alla ricerca
+function renderTable() {
+    var search = searchInput.value.toLowerCase(); // testo ricerca
+    tableBody.innerHTML = ""; // pulisce tabella
+
+    // filtra i fornitori in base alla ricerca (companyName, contactName, country)
+    var filtered = suppliers.filter(function (supplier) {
+
+        return (
+            supplier.companyName.toLowerCase().includes(search) ||
+            supplier.contactName.toLowerCase().includes(search) ||
+            supplier.country.toLowerCase().includes(search)
+        );
     });
 
-    function request(method, url, data, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, url, true);
-        xhr.setRequestHeader("Accept", "application/json");
+    // nessun risultato => tabella vuota
+    if (filtered.length === 0) {
 
-        if (data) {
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        }
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    Nessun fornitore trovato
+                </td>
+            </tr>
+        `;
 
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState !== XMLHttpRequest.DONE) {
-                return;
-            }
-
-            var response = parseJson(xhr.responseText);
-
-            if (xhr.status >= 200 && xhr.status < 300) {
-                callback(null, response);
-                return;
-            }
-
-            callback(new Error("Errore HTTP " + xhr.status));
-        };
-
-        xhr.onerror = function () {
-            callback(new Error("Impossibile contattare la servlet."));
-        };
-
-        xhr.send(data ? JSON.stringify(data) : null);
+        return;
     }
 
-    function loadSuppliers() {
-        setLoading(true);
-        showMessage("");
-
-        request("GET", API_URL, null, function (error, data) {
-            setLoading(false);
-
-            if (error) {
-                showMessage(error.message, true);
-                renderEmptyState("Impossibile caricare i fornitori.");
-                return;
-            }
-
-            suppliers = Array.isArray(data) ? data : [];
-            renderTable();
-        });
-    }
-
-    function onFormSubmit(event) {
-        event.preventDefault();
-
-        var supplier = readForm();
-        var isEdit = supplier.supplierID > 0;
-        var method = isEdit ? "PUT" : "POST";
-
-        submitButton.disabled = true;
-        showMessage("");
-
-        request(method, API_URL, supplier, function (error, data) {
-            submitButton.disabled = false;
-
-            if (error || !data || data.success !== true) {
-                showMessage("Salvataggio non riuscito.", true);
-                return;
-            }
-
-            resetForm();
-            showMessage(isEdit ? "Fornitore aggiornato." : "Fornitore inserito.");
-            loadSuppliers();
-        });
-    }
-
-    function onTableAction(event) {
-        var button = event.target.closest("button[data-action]");
-
-        if (!button) {
-            return;
-        }
-
-        var id = Number(button.getAttribute("data-id"));
-        var action = button.getAttribute("data-action");
-        var supplier = findSupplier(id);
-
-        if (!supplier) {
-            showMessage("Fornitore non trovato.", true);
-            return;
-        }
-
-        if (action === "edit") {
-            fillForm(supplier);
-            return;
-        }
-
-        if (action === "delete") {
-            deleteSupplier(supplier);
-        }
-    }
-
-    function deleteSupplier(supplier) {
-        var name = supplier.companyName || ("ID " + supplier.supplierID);
-
-        if (!window.confirm("Eliminare il fornitore " + name + "?")) {
-            return;
-        }
-
-        request("DELETE", API_URL + "?id=" + encodeURIComponent(supplier.supplierID), null, function (error, data) {
-            if (error || !data || data.success !== true) {
-                showMessage("Eliminazione non riuscita.", true);
-                return;
-            }
-
-            showMessage("Fornitore eliminato.");
-            if (Number(document.getElementById("supplierID").value) === supplier.supplierID) {
-                resetForm();
-            }
-            loadSuppliers();
-        });
-    }
-
-    function renderTable() {
-        var query = searchInput.value.trim().toLowerCase();
-        var rows = suppliers.filter(function (supplier) {
-            if (!query) {
-                return true;
-            }
-
-            return [
-                supplier.companyName,
-                supplier.contactName,
-                supplier.city,
-                supplier.country,
-                supplier.phone
-            ].join(" ").toLowerCase().indexOf(query) !== -1;
-        });
-
-        tableBody.textContent = "";
-
-        if (!rows.length) {
-            renderEmptyState(query ? "Nessun fornitore corrisponde alla ricerca." : "Nessun fornitore disponibile.");
-            updateCount(0);
-            return;
-        }
-
-        rows.forEach(function (supplier) {
-            var row = document.createElement("tr");
-
-            appendCell(row, supplier.supplierID);
-            appendCell(row, supplier.companyName);
-            appendCell(row, supplier.contactName);
-            appendCell(row, supplier.city);
-            appendCell(row, supplier.country);
-            appendCell(row, supplier.phone);
-            appendActions(row, supplier.supplierID);
-
-            tableBody.appendChild(row);
-        });
-
-        updateCount(rows.length);
-    }
-
-    function appendCell(row, value) {
-        var cell = document.createElement("td");
-        cell.textContent = value || "-";
-        row.appendChild(cell);
-    }
-
-    function appendActions(row, id) {
-        var cell = document.createElement("td");
-        var editButton = document.createElement("button");
-        var deleteButton = document.createElement("button");
-
-        cell.className = "actions-cell";
-
-        editButton.type = "button";
-        editButton.className = "secondary-button";
-        editButton.textContent = "Modifica";
-        editButton.setAttribute("data-action", "edit");
-        editButton.setAttribute("data-id", id);
-
-        deleteButton.type = "button";
-        deleteButton.className = "danger-button";
-        deleteButton.textContent = "Elimina";
-        deleteButton.setAttribute("data-action", "delete");
-        deleteButton.setAttribute("data-id", id);
-
-        cell.appendChild(editButton);
-        cell.appendChild(deleteButton);
-        row.appendChild(cell);
-    }
-
-    function renderEmptyState(text) {
-        tableBody.textContent = "";
-
+    // righe
+    filtered.forEach(function (supplier) {
         var row = document.createElement("tr");
-        var cell = document.createElement("td");
-        cell.className = "empty-state";
-        cell.colSpan = 7;
-        cell.textContent = text;
-        row.appendChild(cell);
+
+        row.innerHTML = `
+
+            <td>${supplier.supplierID}</td>
+            <td>${supplier.companyName}</td>
+            <td>${supplier.contactName}</td>
+            <td>${supplier.city}</td>
+            <td>${supplier.country}</td>
+            <td>${supplier.phone}</td>
+
+            <td>
+                <button 
+                    data-action="edit"
+                    data-id="${supplier.supplierID}">
+                    Modifica
+                </button>
+
+                <button 
+                    data-action="delete"
+                    data-id="${supplier.supplierID}">
+                    Elimina
+                </button>
+            </td>
+        `;
+
         tableBody.appendChild(row);
-    }
+    });
+}
 
-    function readForm() {
-        var supplier = {};
+// GESTIONE EVENTI //
 
-        fields.forEach(function (field) {
-            var element = document.getElementById(field);
-            var value = element.value.trim();
-            supplier[field] = field === "supplierID" ? Number(value || 0) : value;
-        });
+// gestisce i pulsanti di modifica ed eliminazione nella tabella
+function tableActions(event) {
 
-        return supplier;
-    }
+    var button = event.target; // recupera bottone cliccato
+    var action = button.dataset.action; // recupera azione (edit o delete)
+    var id = Number(button.dataset.id); // id fornitore
 
-    function fillForm(supplier) {
-        fields.forEach(function (field) {
-            document.getElementById(field).value = supplier[field] || "";
-        });
+    // cerca fornitore per ID
+    var supplier = suppliers.find(function (s) {
+        return s.supplierID === id;
+    });
 
-        formTitle.textContent = "Modifica fornitore";
-        formMode.textContent = "Modifica ID " + supplier.supplierID;
-        submitButton.textContent = "Aggiorna";
-        document.getElementById("companyName").focus();
-    }
+    if (!supplier) return; // fornitore non trovato
 
-    function resetForm() {
-        form.reset();
-        document.getElementById("supplierID").value = "";
-        formTitle.textContent = "Nuovo fornitore";
-        formMode.textContent = "Inserimento";
-        submitButton.textContent = "Salva";
-        submitButton.disabled = false;
-    }
+    // modifica fornitore
+    if (action === "edit") fillForm(supplier);
 
-    function findSupplier(id) {
-        return suppliers.find(function (supplier) {
-            return Number(supplier.supplierID) === id;
-        });
-    }
+    // eliminazione fornitore
+    if (action === "delete") deleteSupplier(id);
+}
 
-    function updateCount(count) {
-        var total = suppliers.length;
-        var suffix = total === 1 ? "fornitore" : "fornitori";
-        recordCount.textContent = count + " di " + total + " " + suffix;
-    }
+// reset form dei dati e stato pagina
+function resetForm() {
+    // pulisce i campi
+    form.reset();
 
-    function setLoading(isLoading) {
-        refreshButton.disabled = isLoading;
-        refreshButton.textContent = isLoading ? "Caricamento..." : "Aggiorna";
-    }
+    // svuota id
+    document.getElementById("supplierID").value = "";
 
-    function showMessage(text, isError) {
-        message.textContent = text;
-        message.className = "message";
+    // reset bottone
+    submitButton.textContent = "Salva";
+}
 
-        if (!text) {
-            return;
-        }
+// mostra i messaggi (errori, ecc.) all'utente
+function showMessage(text, isError) {
+    message.textContent = text;
 
-        message.classList.add("is-visible");
-        if (isError) {
-            message.classList.add("is-error");
-        }
-    }
-
-    function parseJson(text) {
-        if (!text) {
-            return null;
-        }
-
-        try {
-            return JSON.parse(text);
-        } catch (error) {
-            return null;
-        }
-    }
-})();
+    if (isError) message.style.color = "red";
+    else message.style.color = "green";
+}
